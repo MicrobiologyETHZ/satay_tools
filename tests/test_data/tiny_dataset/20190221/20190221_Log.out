@@ -1,0 +1,166 @@
+STAR version=2.7.11b
+STAR compilation time,server,dir=2025-01-09T12:32:06+0000 :/opt/conda/conda-bld/star_1736425784849/work/source
+##### Command Line:
+/nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/conda_envs/satay/bin/STAR-avx2 --runThreadN 1 --genomeDir ref --outSAMtype BAM SortedByCoordinate --outFileNamePrefix /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221/20190221_ --outReadsUnmapped Fastx --outFilterMultimapNmax 10 --outFilterMismatchNmax 2 --readFilesIn /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221.A-1_4nMaF_DpnII_R1_subsample_0pct.fastq.gz --readFilesCommand zcat
+##### Initial USER parameters from Command Line:
+outFileNamePrefix                 /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221/20190221_
+###### All USER parameters from Command Line:
+runThreadN                    1     ~RE-DEFINED
+genomeDir                     ref     ~RE-DEFINED
+outSAMtype                    BAM   SortedByCoordinate        ~RE-DEFINED
+outFileNamePrefix             /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221/20190221_     ~RE-DEFINED
+outReadsUnmapped              Fastx     ~RE-DEFINED
+outFilterMultimapNmax         10     ~RE-DEFINED
+outFilterMismatchNmax         2     ~RE-DEFINED
+readFilesIn                   /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221.A-1_4nMaF_DpnII_R1_subsample_0pct.fastq.gz        ~RE-DEFINED
+readFilesCommand              zcat        ~RE-DEFINED
+##### Finished reading parameters from all sources
+
+##### Final user re-defined parameters-----------------:
+runThreadN                        1
+genomeDir                         ref
+readFilesIn                       /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221.A-1_4nMaF_DpnII_R1_subsample_0pct.fastq.gz   
+readFilesCommand                  zcat   
+outFileNamePrefix                 /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221/20190221_
+outReadsUnmapped                  Fastx
+outSAMtype                        BAM   SortedByCoordinate   
+outFilterMultimapNmax             10
+outFilterMismatchNmax             2
+
+-------------------------------
+##### Final effective command line:
+/nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/conda_envs/satay/bin/STAR-avx2   --runThreadN 1   --genomeDir ref   --readFilesIn /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221.A-1_4nMaF_DpnII_R1_subsample_0pct.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221/20190221_   --outReadsUnmapped Fastx   --outSAMtype BAM   SortedByCoordinate      --outFilterMultimapNmax 10   --outFilterMismatchNmax 2
+----------------------------------------
+
+Number of fastq files for each mate = 1
+
+   Input read files for mate 1 :
+-rw-rw----+ 1 ansintsova biol-micro-sunagawa-primary 263262 Apr  3 12:02 /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221.A-1_4nMaF_DpnII_R1_subsample_0pct.fastq.gz
+
+   readsCommandsFile:
+exec > "/nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221/20190221__STARtmp/tmp.fifo.read1"
+echo FILE 0
+zcat      "/nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221.A-1_4nMaF_DpnII_R1_subsample_0pct.fastq.gz"
+
+ParametersSolo: --soloCellFilterType CellRanger2.2 filtering parameters:  3000 0.99 10
+WARNING: --limitBAMsortRAM=0, will use genome size as RAM limit for BAM sorting
+Finished loading and checking parameters
+Reading genome generation parameters:
+### /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/conda_envs/satay/bin/STAR-avx2   --runMode genomeGenerate      --runThreadN 1   --genomeDir ref   --genomeFastaFiles ref/GCF_000146045.2_R64_genomic.fna      --genomeSAindexNbases 10   --limitGenomeGenerateRAM 16000000000
+### GstrandBit=32
+versionGenome                 2.7.4a     ~RE-DEFINED
+genomeType                    Full     ~RE-DEFINED
+genomeFastaFiles              ref/GCF_000146045.2_R64_genomic.fna        ~RE-DEFINED
+genomeSAindexNbases           10     ~RE-DEFINED
+genomeChrBinNbits             18     ~RE-DEFINED
+genomeSAsparseD               1     ~RE-DEFINED
+genomeTransformType           None     ~RE-DEFINED
+genomeTransformVCF            -     ~RE-DEFINED
+sjdbOverhang                  0     ~RE-DEFINED
+sjdbFileChrStartEnd           -        ~RE-DEFINED
+sjdbGTFfile                   -     ~RE-DEFINED
+sjdbGTFchrPrefix              -     ~RE-DEFINED
+sjdbGTFfeatureExon            exon     ~RE-DEFINED
+sjdbGTFtagExonParentTranscripttranscript_id     ~RE-DEFINED
+sjdbGTFtagExonParentGene      gene_id     ~RE-DEFINED
+sjdbInsertSave                Basic     ~RE-DEFINED
+genomeFileSizes               14680064   100296120        ~RE-DEFINED
+Genome version is compatible with current STAR
+Number of real (reference) chromosomes= 17
+1	NC_001133.9	230218	0
+2	NC_001134.8	813184	262144
+3	NC_001135.5	316620	1310720
+4	NC_001136.10	1531933	1835008
+5	NC_001137.3	576874	3407872
+6	NC_001138.5	270161	4194304
+7	NC_001139.9	1090940	4718592
+8	NC_001140.6	562643	6029312
+9	NC_001141.2	439888	6815744
+10	NC_001142.9	745751	7340032
+11	NC_001143.9	666816	8126464
+12	NC_001144.5	1078177	8912896
+13	NC_001145.3	924431	10223616
+14	NC_001146.8	784333	11272192
+15	NC_001147.6	1091291	12058624
+16	NC_001148.4	948066	13369344
+17	NC_001224.1	85779	14417920
+Started loading the genome: Tue Apr  8 13:00:53 2025
+
+Genome: size given as a parameter = 14680064
+SA: size given as a parameter = 100296120
+SAindex: size given as a parameter = 1
+Read from SAindex: pGe.gSAindexNbases=10  nSAi=1398100
+nGenome=14680064;  nSAbyte=100296120
+GstrandBit=32   SA number of indices=24314210
+Shared memory is not used for genomes. Allocated a private copy of the genome.
+Genome file size: 14680064 bytes; state: good=1 eof=0 fail=0 bad=0
+Loading Genome ... done! state: good=1 eof=0 fail=0 bad=0; loaded 14680064 bytes
+SA file size: 100296120 bytes; state: good=1 eof=0 fail=0 bad=0
+Loading SA ... done! state: good=1 eof=0 fail=0 bad=0; loaded 100296120 bytes
+Loading SAindex ... done: 6116787 bytes
+Finished loading the genome: Tue Apr  8 13:00:53 2025
+
+alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by (2^winBinNbits)*winAnchorDistNbins=589824
+Opening the file: /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221/20190221__STARtmp//Unmapped.out.mate0.thread0 ... ok
+Starting to map file # 0
+mate 1:   /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/repos/barral_satay/code/satay-cli/tests/test_data/tiny_dataset/20190221.A-1_4nMaF_DpnII_R1_subsample_0pct.fastq.gz
+Thread #0 end of input stream, nextChar=-1
+BAM sorting: 5664 mapped reads
+BAM sorting bins genomic start loci:
+1	1	3539
+2	1	255105
+3	1	495360
+4	2	63804
+5	2	258882
+6	3	334510
+7	3	443845
+8	3	660248
+9	3	981565
+10	4	2662
+11	4	252251
+12	5	110076
+13	6	144218
+14	6	511911
+15	6	806214
+16	7	28093
+17	7	108511
+18	7	358490
+19	8	210715
+20	9	10731
+21	9	337608
+22	9	543964
+23	10	172335
+24	10	463505
+25	11	119816
+26	11	410957
+27	11	454684
+28	11	461503
+29	11	466934
+30	11	531634
+31	11	899469
+32	12	69924
+33	12	361428
+34	12	895370
+35	13	406012
+36	13	680673
+37	14	309156
+38	14	565008
+39	14	565519
+40	14	565519
+41	14	565519
+42	14	565519
+43	14	565519
+44	14	565519
+45	14	566479
+46	14	885951
+47	15	116422
+48	15	500281
+Completed: thread #0
+Apr 08 13:00:54 ..... finished mapping
+RAM after mapping:
+VmPeak:	  338788 kB; VmSize:	  290936 kB; VmHWM:	  271440 kB; VmRSS:	  268604 kB; 
+RAM after freeing genome index memory:
+VmPeak:	  338788 kB; VmSize:	  172672 kB; VmHWM:	  271440 kB; VmRSS:	  150348 kB; 
+Apr 08 13:00:54 ..... started sorting BAM
+Max memory needed for sorting = 194000
+ALL DONE!

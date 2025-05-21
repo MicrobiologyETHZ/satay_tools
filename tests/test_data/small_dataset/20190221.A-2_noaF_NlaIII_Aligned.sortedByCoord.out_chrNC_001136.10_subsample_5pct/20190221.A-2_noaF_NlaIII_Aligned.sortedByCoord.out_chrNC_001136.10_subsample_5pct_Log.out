@@ -1,0 +1,172 @@
+STAR version=2.7.11b
+STAR compilation time,server,dir=2025-01-09T12:32:06+0000 :/opt/conda/conda-bld/star_1736425784849/work/source
+##### Command Line:
+/nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/conda_envs/satay/bin/STAR-avx2 --runThreadN 4 --genomeDir ref --outSAMtype BAM SortedByCoordinate --outFileNamePrefix tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct_ --outFilterMultimapNmax 10 --outFilterMismatchNmax 2 --readFilesIn tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct.fastq.gz --readFilesCommand zcat
+##### Initial USER parameters from Command Line:
+outFileNamePrefix                 tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct_
+###### All USER parameters from Command Line:
+runThreadN                    4     ~RE-DEFINED
+genomeDir                     ref     ~RE-DEFINED
+outSAMtype                    BAM   SortedByCoordinate        ~RE-DEFINED
+outFileNamePrefix             tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct_     ~RE-DEFINED
+outFilterMultimapNmax         10     ~RE-DEFINED
+outFilterMismatchNmax         2     ~RE-DEFINED
+readFilesIn                   tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct.fastq.gz        ~RE-DEFINED
+readFilesCommand              zcat        ~RE-DEFINED
+##### Finished reading parameters from all sources
+
+##### Final user re-defined parameters-----------------:
+runThreadN                        4
+genomeDir                         ref
+readFilesIn                       tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct.fastq.gz   
+readFilesCommand                  zcat   
+outFileNamePrefix                 tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct_
+outSAMtype                        BAM   SortedByCoordinate   
+outFilterMultimapNmax             10
+outFilterMismatchNmax             2
+
+-------------------------------
+##### Final effective command line:
+/nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/conda_envs/satay/bin/STAR-avx2   --runThreadN 4   --genomeDir ref   --readFilesIn tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct.fastq.gz      --readFilesCommand zcat      --outFileNamePrefix tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct_   --outSAMtype BAM   SortedByCoordinate      --outFilterMultimapNmax 10   --outFilterMismatchNmax 2
+----------------------------------------
+
+Number of fastq files for each mate = 1
+
+   Input read files for mate 1 :
+-rw-rw----+ 1 ansintsova biol-micro-sunagawa-primary 1058133 Apr  3 12:00 tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct.fastq.gz
+
+   readsCommandsFile:
+exec > "tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct__STARtmp/tmp.fifo.read1"
+echo FILE 0
+zcat      "tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct.fastq.gz"
+
+ParametersSolo: --soloCellFilterType CellRanger2.2 filtering parameters:  3000 0.99 10
+WARNING: --limitBAMsortRAM=0, will use genome size as RAM limit for BAM sorting
+Finished loading and checking parameters
+Reading genome generation parameters:
+### /nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/conda_envs/satay/bin/STAR-avx2   --runMode genomeGenerate      --runThreadN 1   --genomeDir ref   --genomeFastaFiles ref/GCF_000146045.2_R64_genomic.fna      --genomeSAindexNbases 10   --limitGenomeGenerateRAM 16000000000
+### GstrandBit=32
+versionGenome                 2.7.4a     ~RE-DEFINED
+genomeType                    Full     ~RE-DEFINED
+genomeFastaFiles              ref/GCF_000146045.2_R64_genomic.fna        ~RE-DEFINED
+genomeSAindexNbases           10     ~RE-DEFINED
+genomeChrBinNbits             18     ~RE-DEFINED
+genomeSAsparseD               1     ~RE-DEFINED
+genomeTransformType           None     ~RE-DEFINED
+genomeTransformVCF            -     ~RE-DEFINED
+sjdbOverhang                  0     ~RE-DEFINED
+sjdbFileChrStartEnd           -        ~RE-DEFINED
+sjdbGTFfile                   -     ~RE-DEFINED
+sjdbGTFchrPrefix              -     ~RE-DEFINED
+sjdbGTFfeatureExon            exon     ~RE-DEFINED
+sjdbGTFtagExonParentTranscripttranscript_id     ~RE-DEFINED
+sjdbGTFtagExonParentGene      gene_id     ~RE-DEFINED
+sjdbInsertSave                Basic     ~RE-DEFINED
+genomeFileSizes               14680064   100296120        ~RE-DEFINED
+Genome version is compatible with current STAR
+Number of real (reference) chromosomes= 17
+1	NC_001133.9	230218	0
+2	NC_001134.8	813184	262144
+3	NC_001135.5	316620	1310720
+4	NC_001136.10	1531933	1835008
+5	NC_001137.3	576874	3407872
+6	NC_001138.5	270161	4194304
+7	NC_001139.9	1090940	4718592
+8	NC_001140.6	562643	6029312
+9	NC_001141.2	439888	6815744
+10	NC_001142.9	745751	7340032
+11	NC_001143.9	666816	8126464
+12	NC_001144.5	1078177	8912896
+13	NC_001145.3	924431	10223616
+14	NC_001146.8	784333	11272192
+15	NC_001147.6	1091291	12058624
+16	NC_001148.4	948066	13369344
+17	NC_001224.1	85779	14417920
+Started loading the genome: Tue Apr  8 13:42:13 2025
+
+Genome: size given as a parameter = 14680064
+SA: size given as a parameter = 100296120
+SAindex: size given as a parameter = 1
+Read from SAindex: pGe.gSAindexNbases=10  nSAi=1398100
+nGenome=14680064;  nSAbyte=100296120
+GstrandBit=32   SA number of indices=24314210
+Shared memory is not used for genomes. Allocated a private copy of the genome.
+Genome file size: 14680064 bytes; state: good=1 eof=0 fail=0 bad=0
+Loading Genome ... done! state: good=1 eof=0 fail=0 bad=0; loaded 14680064 bytes
+SA file size: 100296120 bytes; state: good=1 eof=0 fail=0 bad=0
+Loading SA ... done! state: good=1 eof=0 fail=0 bad=0; loaded 100296120 bytes
+Loading SAindex ... done: 6116787 bytes
+Finished loading the genome: Tue Apr  8 13:42:13 2025
+
+alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by (2^winBinNbits)*winAnchorDistNbins=589824
+Created thread # 1
+Created thread # 2
+Starting to map file # 0
+mate 1:   tests/test_data/small_dataset/20190221.A-2_noaF_NlaIII_Aligned.sortedByCoord.out_chrNC_001136.10_subsample_5pct.fastq.gz
+Created thread # 3
+Thread #1 end of input stream, nextChar=-1
+Completed: thread #2
+Completed: thread #0
+Completed: thread #3
+BAM sorting: 64737 mapped reads
+BAM sorting bins genomic start loci:
+1	1	559132
+2	3	3419
+3	3	43790
+4	3	90571
+5	3	145592
+6	3	198482
+7	3	242054
+8	3	302788
+9	3	352649
+10	3	372525
+11	3	417827
+12	3	437778
+13	3	452880
+14	3	465166
+15	3	505002
+16	3	524150
+17	3	531891
+18	3	537173
+19	3	552263
+20	3	591959
+21	3	636028
+22	3	690944
+23	3	769353
+24	3	853964
+25	3	894331
+26	3	958436
+27	3	988000
+28	3	1038027
+29	3	1091615
+30	3	1163208
+31	3	1210660
+32	3	1271055
+33	3	1351873
+34	3	1420279
+35	3	1478712
+36	3	1525668
+37	4	434872
+38	6	222283
+39	6	812623
+40	7	557168
+41	9	737151
+42	11	374042
+43	11	978420
+44	11	1072951
+45	12	188108
+46	13	566560
+47	14	971459
+48	14	1090078
+Completed: thread #1
+Joined thread # 1
+Joined thread # 2
+Joined thread # 3
+Apr 08 13:42:17 ..... finished mapping
+RAM after mapping:
+VmPeak:	  965576 kB; VmSize:	  900040 kB; VmHWM:	  588436 kB; VmRSS:	  573180 kB; 
+RAM after freeing genome index memory:
+VmPeak:	  965576 kB; VmSize:	  781776 kB; VmHWM:	  588436 kB; VmRSS:	  454980 kB; 
+Apr 08 13:42:18 ..... started sorting BAM
+Max memory needed for sorting = 342817
+ALL DONE!

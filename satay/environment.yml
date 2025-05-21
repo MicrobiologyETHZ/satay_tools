@@ -1,0 +1,12 @@
+name: bioinformatics_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python>=3.9
+  - samtools>=1.13
+  - bedtools
+  - blast
+  - pyranges
+  - pydeseq2

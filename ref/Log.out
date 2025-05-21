@@ -1,0 +1,91 @@
+STAR version=2.7.11b
+STAR compilation time,server,dir=2025-01-09T12:32:06+0000 :/opt/conda/conda-bld/star_1736425784849/work/source
+##### Command Line:
+/nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/conda_envs/satay/bin/STAR-avx2 --runMode genomeGenerate --runThreadN 1 --genomeDir ref --genomeFastaFiles ref/GCF_000146045.2_R64_genomic.fna --genomeSAindexNbases 10 --limitGenomeGenerateRAM 16000000000
+##### Initial USER parameters from Command Line:
+###### All USER parameters from Command Line:
+runMode                       genomeGenerate        ~RE-DEFINED
+runThreadN                    1     ~RE-DEFINED
+genomeDir                     ref     ~RE-DEFINED
+genomeFastaFiles              ref/GCF_000146045.2_R64_genomic.fna        ~RE-DEFINED
+genomeSAindexNbases           10     ~RE-DEFINED
+limitGenomeGenerateRAM        16000000000     ~RE-DEFINED
+##### Finished reading parameters from all sources
+
+##### Final user re-defined parameters-----------------:
+runMode                           genomeGenerate   
+runThreadN                        1
+genomeDir                         ref
+genomeFastaFiles                  ref/GCF_000146045.2_R64_genomic.fna   
+genomeSAindexNbases               10
+limitGenomeGenerateRAM            16000000000
+
+-------------------------------
+##### Final effective command line:
+/nfs/cds-peta/exports/biol_micro_cds_gr_sunagawa/scratch/Projects_NCCR/conda_envs/satay/bin/STAR-avx2   --runMode genomeGenerate      --runThreadN 1   --genomeDir ref   --genomeFastaFiles ref/GCF_000146045.2_R64_genomic.fna      --genomeSAindexNbases 10   --limitGenomeGenerateRAM 16000000000
+----------------------------------------
+
+Number of fastq files for each mate = 1
+ParametersSolo: --soloCellFilterType CellRanger2.2 filtering parameters:  3000 0.99 10
+Finished loading and checking parameters
+--genomeDir directory exists and will be overwritten: ref/
+Apr 04 15:53:16 ... starting to generate Genome files
+ref/GCF_000146045.2_R64_genomic.fna : chr # 0  "NC_001133.9" chrStart: 0
+ref/GCF_000146045.2_R64_genomic.fna : chr # 1  "NC_001134.8" chrStart: 262144
+ref/GCF_000146045.2_R64_genomic.fna : chr # 2  "NC_001135.5" chrStart: 1310720
+ref/GCF_000146045.2_R64_genomic.fna : chr # 3  "NC_001136.10" chrStart: 1835008
+ref/GCF_000146045.2_R64_genomic.fna : chr # 4  "NC_001137.3" chrStart: 3407872
+ref/GCF_000146045.2_R64_genomic.fna : chr # 5  "NC_001138.5" chrStart: 4194304
+ref/GCF_000146045.2_R64_genomic.fna : chr # 6  "NC_001139.9" chrStart: 4718592
+ref/GCF_000146045.2_R64_genomic.fna : chr # 7  "NC_001140.6" chrStart: 6029312
+ref/GCF_000146045.2_R64_genomic.fna : chr # 8  "NC_001141.2" chrStart: 6815744
+ref/GCF_000146045.2_R64_genomic.fna : chr # 9  "NC_001142.9" chrStart: 7340032
+ref/GCF_000146045.2_R64_genomic.fna : chr # 10  "NC_001143.9" chrStart: 8126464
+ref/GCF_000146045.2_R64_genomic.fna : chr # 11  "NC_001144.5" chrStart: 8912896
+ref/GCF_000146045.2_R64_genomic.fna : chr # 12  "NC_001145.3" chrStart: 10223616
+ref/GCF_000146045.2_R64_genomic.fna : chr # 13  "NC_001146.8" chrStart: 11272192
+ref/GCF_000146045.2_R64_genomic.fna : chr # 14  "NC_001147.6" chrStart: 12058624
+ref/GCF_000146045.2_R64_genomic.fna : chr # 15  "NC_001148.4" chrStart: 13369344
+ref/GCF_000146045.2_R64_genomic.fna : chr # 16  "NC_001224.1" chrStart: 14417920
+Chromosome sequence lengths: 
+NC_001133.9	230218
+NC_001134.8	813184
+NC_001135.5	316620
+NC_001136.10	1531933
+NC_001137.3	576874
+NC_001138.5	270161
+NC_001139.9	1090940
+NC_001140.6	562643
+NC_001141.2	439888
+NC_001142.9	745751
+NC_001143.9	666816
+NC_001144.5	1078177
+NC_001145.3	924431
+NC_001146.8	784333
+NC_001147.6	1091291
+NC_001148.4	948066
+NC_001224.1	85779
+Genome sequence total length = 12157105
+Genome size with padding = 14680064
+Estimated genome size with padding and SJs: total=genome+SJ=215680064 = 14680064 + 201000000
+GstrandBit=32
+Number of SA indices: 24314210
+Apr 04 15:53:16 ... starting to sort Suffix Array. This may take a long time...
+Number of chunks: 1;   chunks size limit: 9582383800 bytes
+Apr 04 15:53:16 ... sorting Suffix Array chunks and saving them to disk...
+Writing 194513680 bytes into ref//SA_0 ; empty space on disk = 149498328252416 bytes ... done
+Apr 04 15:53:25 ... loading chunks from disk, packing SA...
+Apr 04 15:53:25 ... finished generating suffix array
+Apr 04 15:53:25 ... generating Suffix Array index
+Apr 04 15:53:26 ... completed Suffix Array index
+Apr 04 15:53:26 ... writing Genome to disk ...
+Writing 14680064 bytes into ref//Genome ; empty space on disk = 149498260094976 bytes ... done
+SA size in bytes: 100296120
+Apr 04 15:53:26 ... writing Suffix Array to disk ...
+Writing 100296120 bytes into ref//SA ; empty space on disk = 149498245414912 bytes ... done
+Apr 04 15:53:26 ... writing SAindex to disk
+Writing 8 bytes into ref//SAindex ; empty space on disk = 149498144751616 bytes ... done
+Writing 88 bytes into ref//SAindex ; empty space on disk = 149498144751616 bytes ... done
+Writing 6116691 bytes into ref//SAindex ; empty space on disk = 149498144751616 bytes ... done
+Apr 04 15:53:26 ..... finished successfully
+DONE: Genome generation, EXITING
