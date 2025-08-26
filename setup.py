@@ -8,7 +8,7 @@ setup(
     version="0.1.0",
     author="Anna Sintsova",
     author_email="ansintsova@ethz.ch",
-    description="A tool for analyzing transposon insertion sequencing data",
+    description="A tool for analyzing SATAY transposon insertion sequencing data",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="",

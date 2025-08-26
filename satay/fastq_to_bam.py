@@ -50,13 +50,13 @@ def setup_logger(log_dir):
     return logger
 
 
-def find_fastq_files(fastq_dir):
+def find_fastq_files(fastq_dir, suffix=None):
     """Find all FASTQ files in the given directory"""
     fastq_files = []
-    extensions = [".fastq", ".fq", ".fastq.gz", ".fq.gz"]
-
+    extensions = [suffix] if suffix else [
+        ".fastq", ".fq", ".fastq.gz", ".fq.gz"]
     for ext in extensions:
-        fastq_files.extend(glob.glob(os.path.join(fastq_dir, f"*{ext}")))
+        fastq_files.extend(Path(fastq_dir).rglob(f"*{ext}"))
 
     return sorted(fastq_files)
 
@@ -327,7 +327,7 @@ def verify_star_index(genome_dir, logger):
     return True
 
 
-def map_fastq_to_bam(fastq_dir, output_dir, genome_fasta, threads, single_end=True):
+def map_fastq_to_bam(fastq_dir, output_dir, genome_fasta, threads, suffix='.1.fq.gz', single_end=True):
     # parser = argparse.ArgumentParser(
     #     description='Map FASTQ files to yeast genome using STAR')
     # parser.add_argument('--fastq_dir', required=True,
@@ -381,8 +381,8 @@ def map_fastq_to_bam(fastq_dir, output_dir, genome_fasta, threads, single_end=Tr
             sys.exit(1)
     logger.info(f"START genome index found in {genome_dir}")
     # Find FASTQ files
-    logger.info(f"Searching for FASTQ files in {fastq_dir}")
-    fastq_files = find_fastq_files(fastq_dir)
+    logger.info(f"Searching for FASTQ files in {fastq_dir} with rglob")
+    fastq_files = find_fastq_files(fastq_dir, suffix=suffix)
 
     if not fastq_files:
         logger.error(f"No FASTQ files found in {fastq_dir}")

@@ -25,6 +25,10 @@ def satay():
               type=click.Path(exists=True, path_type=Path),
               required=True,
               help='Genome fasta')
+@click.option('--suffix', '-s',
+              type=str,
+              default=None,
+              help='FASTQ file suffix')
 @click.option('--threads', '-t',
               type=int,
               default=4,
@@ -33,12 +37,14 @@ def satay():
 def map(fastq_dir: Path,
         output_dir: Path,
         genome_fasta: Path,
+        suffix: str,
         threads: int
         ):
     """Map transposon insertions for a sample."""
     click.echo(genome_fasta)
     map_fastq_to_bam(fastq_dir=fastq_dir,
                      output_dir=output_dir, genome_fasta=genome_fasta,
+                     suffix=suffix,
                      threads=threads)
 
 
