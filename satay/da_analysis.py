@@ -43,11 +43,13 @@ def load_filter_deseq(counts_file, sample_data_file,
                       filter=100,
                       comp_col='conc', baseline="0nMaF",
                       a=0.01,
+                      sample_id_col='sample_id'
                       ):
-    sample_data = pd.read_csv(sample_data_file, index_col=0).sort_index()
-
-    df = pd.read_csv(counts_file, index_col=0).T.sort_index()
-
+    sample_data = pd.read_csv(sample_data_file)
+    df = pd.read_csv(counts_file, index_col=0)
+    df = df[sample_data[sample_id_col].unique()]
+    df = df.T.sort_index()
+    sample_data = sample_data.set_index(sample_id_col).sort_index()
     genes_to_keep = df.columns[df.sum(axis=0) >= filter]
     df = df[genes_to_keep]
     # check if indices are the same

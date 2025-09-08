@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="satay-cli",
+    name="satay_tools",
     version="0.1.0",
     author="Anna Sintsova",
     author_email="ansintsova@ethz.ch",

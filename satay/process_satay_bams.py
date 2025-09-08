@@ -55,9 +55,9 @@ def merge_bams(sample, output_dir, bam_dir, bam_suffix="Aligned.sortedByCoord.ou
     bam_files = [str(bf) for bf in Path(bam_dir).rglob(
         f"*{sample}*/*{bam_suffix}")]
     if bam_files:
-        logging.info(f"Merging {', '.join(bam_files)} with samtools")
+        logging.info(f"Merging {', '.join(bam_files)} with samtools.")
         output_bam = Path(output_dir)/f"{sample}.bam"
-        cmd = ["samtools", "merge", "-o", str(output_bam)] + \
+        cmd = ["samtools", "merge", "-f", "-o", str(output_bam)] + \
             [str(bam) for bam in bam_files]
         run_command(cmd)
         return output_bam
@@ -395,7 +395,7 @@ def merge_cnts_files(
     read_df = pd.concat(read_dfs).astype(int).sort_index()
 
     # Save output files
-    today_str = datetime.today().strftime("%y-%m-%d")
+    today_str = datetime.today().strftime("%Y-%m-%d")
     output_prefix = f"{today_str}_{name}" if name else today_str
     print(output_prefix)
     output_tn = counts_path / f"{output_prefix}_transposon_counts.csv"

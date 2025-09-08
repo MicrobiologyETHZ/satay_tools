@@ -34,12 +34,12 @@ def satay():
               default=4,
               help='Number of threads to run with')
 # TODO add option for different bam extension
-def map(fastq_dir: Path,
-        output_dir: Path,
-        genome_fasta: Path,
-        suffix: str,
-        threads: int
-        ):
+def align(fastq_dir: Path,
+          output_dir: Path,
+          genome_fasta: Path,
+          suffix: str,
+          threads: int
+          ):
     """Map transposon insertions for a sample."""
     click.echo(genome_fasta)
     map_fastq_to_bam(fastq_dir=fastq_dir,
@@ -67,7 +67,7 @@ def map(fastq_dir: Path,
               required=True,
               help='Annotation file(s), ex. gff or bed intervals of interest')
 # TODO add option for different bam extension
-def map2(bam_dir: Path,
+def call(bam_dir: Path,
          sample_name: str,
          output_dir: Path,
          gff: Tuple[Path, ...],
