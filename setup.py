@@ -30,6 +30,8 @@ setup(
         "click>=8.0.0",
         "pandas>=1.3.0",
         "pathlib>=1.0.1",
+        "pydeseq2>=0.3.0",
+        "pyranges>=0.0.129",
     ],
     entry_points={
         "console_scripts": [

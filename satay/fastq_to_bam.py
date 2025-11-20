@@ -3,14 +3,9 @@
 Script to map FASTQ files to the yeast genome using STAR aligner.
 Takes a directory of FASTQ files and aligns them to a specified yeast genome reference.
 
-Usage:
-    python map_to_yeast.py --fastq_dir /path/to/fastq_files --output_dir /path/to/output 
-                          --genome_dir /path/to/star_index --threads 8
 """
 
 import os
-import glob
-import argparse
 import subprocess
 import logging
 from datetime import datetime
@@ -57,7 +52,6 @@ def find_fastq_files(fastq_dir, suffix=None):
         ".fastq", ".fq", ".fastq.gz", ".fq.gz"]
     for ext in extensions:
         fastq_files.extend(Path(fastq_dir).rglob(f"*{ext}"))
-
     return sorted(fastq_files)
 
 
@@ -120,9 +114,6 @@ def run_star_alignment(fastq_file1, fastq_file2, output_dir, genome_dir, sample_
         "--outSAMtype", "BAM", "SortedByCoordinate",
         "--outFileNamePrefix", os.path.join(sample_output_dir,
                                             f"{sample_name}_"),
-        # Allow up to 10 multi-mapping locations for transposon reads
-        "--outFilterMultimapNmax", "10",
-        "--outFilterMismatchNmax", "2",   # Allow up to 2 mismatches
         "--limitBAMsortRAM 1203904172 ",  # this is weird
         "--readFilesIn", fastq_file1
     ]
@@ -327,29 +318,8 @@ def verify_star_index(genome_dir, logger):
     return True
 
 
-def map_fastq_to_bam(fastq_dir, output_dir, genome_fasta, threads, suffix='.1.fq.gz', single_end=True):
-    # parser = argparse.ArgumentParser(
-    #     description='Map FASTQ files to yeast genome using STAR')
-    # parser.add_argument('--fastq_dir', required=True,
-    #                     help='Directory containing FASTQ files')
-    # parser.add_argument('--output_dir', required=True,
-    #                     help='Output directory for BAM files')
-    # parser.add_argument('--genome_dir', required=True,
-    #                     help='Directory containing STAR genome index')
-    # parser.add_argument(
-    #     '--genome_fasta', help='Path to yeast genome FASTA file (required if index needs to be created)')
-    # parser.add_argument('--threads', type=int, default=4,
-    #                     help='Number of threads for STAR')
-    # parser.add_argument('--paired', action='store_true',
-    #                     help='Treat samples as paired-end reads')
-    # parser.add_argument('--single_end', action='store_true',
-    #                     help='Force treating all samples as single-end reads')
-    # parser.add_argument('--create_index', action='store_true',
-    #                     help='Create genome index if it does not exist')
-
-    # args = parser.parse_args()
-
-    # Create output directory if it doesn't exist
+def map_fastq_to_bam(fastq_dir, output_dir, genome_fasta, threads,
+                     suffix='.1.fq.gz', single_end=True):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 

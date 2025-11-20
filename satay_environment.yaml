@@ -1,0 +1,19 @@
+name: satay-tools
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+  - r
+dependencies:
+  - python=3.11
+  - samtools[version='>=1.13']
+  - bedtools
+  - blast
+  - pandas=1.5
+  - ca-certificates
+  - openssl
+  - pyranges==0.1.2
+  - pydeseq2=0.4.12
+  - certifi
+  - numpy==1.26
+  - star

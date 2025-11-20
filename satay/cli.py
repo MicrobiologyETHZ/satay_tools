@@ -16,7 +16,7 @@ def satay():
 @click.option('--fastq-dir', '-f',
               type=click.Path(exists=True, dir_okay=True, path_type=Path),
               required=True,
-              help='Directory containing fastq files')
+              help='Directory containing FASTQ files')
 @click.option('--output-dir', '-o',
               type=click.Path(exists=True, dir_okay=True, path_type=Path),
               required=True,
@@ -25,28 +25,23 @@ def satay():
               type=click.Path(exists=True, path_type=Path),
               required=True,
               help='Genome fasta')
-@click.option('--suffix', '-s',
-              type=str,
-              default=None,
-              help='FASTQ file suffix')
 @click.option('--threads', '-t',
               type=int,
               default=4,
+              show_default=True,
               help='Number of threads to run with')
 # TODO add option for different bam extension
 def align(fastq_dir: Path,
           output_dir: Path,
           genome_fasta: Path,
-          suffix: str,
           threads: int
           ):
-    """Map transposon insertions for a sample."""
+    """Perform read alignment against the reference genome using STAR"""
     click.echo(genome_fasta)
     map_fastq_to_bam(fastq_dir=fastq_dir,
                      output_dir=output_dir, genome_fasta=genome_fasta,
-                     suffix=suffix,
                      threads=threads)
-
+    
 
 @satay.command()
 @click.option('--bam-dir', '-b',
@@ -67,13 +62,13 @@ def align(fastq_dir: Path,
               required=True,
               help='Annotation file(s), ex. gff or bed intervals of interest')
 # TODO add option for different bam extension
-def call(bam_dir: Path,
-         sample_name: str,
-         output_dir: Path,
-         gff: Tuple[Path, ...],
-         ):
-    """Map transposon insertions for a sample."""
-    click.echo(f"Mapping files for sample: {sample_name}")
+def map(bam_dir: Path,
+        sample_name: str,
+        output_dir: Path,
+        gff: Tuple[Path, ...],
+        ):
+    """Identify genomic locations of transposon insertions and compute read counts at each site"""
+    click.echo(f"Processing files for sample: {sample_name}")
     click.echo(f"Output directory: {output_dir}")
     map_sample(bam_dir=bam_dir, sample=sample_name,
                output_dir=output_dir, interval_files=gff)
