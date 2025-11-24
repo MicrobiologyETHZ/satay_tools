@@ -17,3 +17,4 @@ dependencies:
   - certifi
   - numpy==1.26
   - star
+  - pytest

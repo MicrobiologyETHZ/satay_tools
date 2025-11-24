@@ -123,7 +123,7 @@ def run_star_alignment(fastq_file1, fastq_file2, output_dir, genome_dir, sample_
         star_cmd.append(fastq_file2)
 
     # If input is gzipped, add appropriate parameter
-    if fastq_file1.endswith('.gz'):
+    if str(fastq_file1).endswith('.gz'):
         star_cmd.extend(["--readFilesCommand", "zcat"])
 
     # Log the command
@@ -319,7 +319,7 @@ def verify_star_index(genome_dir, logger):
 
 
 def map_fastq_to_bam(fastq_dir, output_dir, genome_fasta, threads,
-                     suffix='.1.fq.gz', single_end=True):
+                     suffix=[], single_end=True):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
