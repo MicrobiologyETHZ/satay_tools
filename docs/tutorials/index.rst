@@ -8,7 +8,7 @@ data using the test dataset included with satay-tools.
 Setting Up Your Workspace
 ------------
 
-For detailed installation instructions, see :doc:`installation`.
+For detailed installation instructions, see :doc:`../installation`.
 
 Before running the tutorial, make sure your activate `satay-tools` environment, `cd` into satay_tools, and create an output directory for your results:
 
@@ -86,6 +86,8 @@ Outputs
 ^^^^^^^
 
 The map step produces:
+
+
 * ``{sample}_*.cnts``: Per-gene insertion and read counts
 * ``{sample}.bed``: Filtered alignments in BED format
 * ``{sample}.bed.insertions.sorted.merged.filtered``: High-confidence insertion sites
