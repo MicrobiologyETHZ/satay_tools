@@ -12,7 +12,7 @@ dependencies:
   - pandas=1.5
   - ca-certificates
   - openssl
-  - pyranges==0.1.2
+  - pyranges
   - pydeseq2=0.4.12
   - certifi
   - numpy==1.26

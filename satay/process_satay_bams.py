@@ -5,7 +5,7 @@ import argparse
 import logging
 import pandas as pd
 from datetime import datetime
-import pyranges as pr
+# import pyranges as pr
 from typing import Tuple, Union, List
 import shutil
 
