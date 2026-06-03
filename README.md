@@ -1,6 +1,10 @@
 # SATAY Tools
 
+[![Documentation Status](https://readthedocs.org/projects/satay-tools/badge/?version=latest)](https://satay-tools.readthedocs.io/en/latest/)
+
 A Python package for analyzing SATAY (Saturation Transposon Analysis in Yeast) transposon insertion sequencing data. This tool provides utilities for processing transposon mutagenesis datasets, including read mapping, insertion site identification, and downstream analysis of yeast fitness data.
+
+📖 **Documentation:** https://satay-tools.readthedocs.io/
 
 ## Features
 

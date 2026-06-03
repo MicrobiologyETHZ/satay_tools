@@ -12,6 +12,10 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/MicrobiologyETHZ/satay_tools",
+    project_urls={
+        "Documentation": "https://satay-tools.readthedocs.io/",
+        "Source": "https://github.com/MicrobiologyETHZ/satay_tools",
+    },
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
