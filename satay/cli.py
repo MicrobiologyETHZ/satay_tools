@@ -1,4 +1,5 @@
 import click
+import os
 from pathlib import Path
 from typing import List, Optional, Tuple, Union
 from satay.fastq_to_bam import map_fastq_to_bam
@@ -30,17 +31,24 @@ def satay():
               default=4,
               show_default=True,
               help='Number of threads to run with')
+@click.option('--limit-bam-sort-ram', '-r',
+              type=int,
+              default=2_000_000_000,
+              show_default=True,
+              help='Max RAM in bytes for STAR BAM sorting (STAR --limitBAMsortRAM). '
+                   'Increase if STAR reports a BAM-sorting RAM error.')
 # TODO add option for different bam extension
 def align(fastq_dir: Path,
           output_dir: Path,
           genome_fasta: Path,
-          threads: int
+          threads: int,
+          limit_bam_sort_ram: int,
           ):
     """Perform read alignment against the reference genome using STAR"""
     click.echo(genome_fasta)
     map_fastq_to_bam(fastq_dir=fastq_dir,
                      output_dir=output_dir, genome_fasta=genome_fasta,
-                     threads=threads)
+                     threads=threads, limit_bam_sort_ram=limit_bam_sort_ram)
     
 
 @satay.command()
@@ -140,6 +148,16 @@ def merge(counts_dir: Path,
               multiple=True,
               default=["locus_tag", "gene"],
               help='gff fields to keep')
+@click.option('--threads', '-t',
+              type=int,
+              default=min(8, os.cpu_count() or 1),
+              show_default=True,
+              help='Number of CPUs for DESeq2 inference')
+@click.option('--sample-id-col',
+              type=str,
+              default='sample_id',
+              show_default=True,
+              help='Column in sample data holding sample IDs (must match count matrix columns)')
 def analyze(counts_file: Path, sample_data: Path,
             output_dir: Path,
             comp_col: str,
@@ -147,11 +165,14 @@ def analyze(counts_file: Path, sample_data: Path,
             filter: int,
             gff: Union[str, Path],
             alpha: float,
-            ids: List
+            ids: List,
+            threads: int,
+            sample_id_col: str
             ):
+    """Run differential abundance analysis (DESeq2) on the merged count matrix."""
     gene_da(counts_file, sample_data, output_dir,
             filter, comp_col, baseline, alpha,
-            gff, ['locus_tag', 'gene'])
+            gff, list(ids), sample_id_col=sample_id_col, n_cpus=threads)
 
 
 def main():

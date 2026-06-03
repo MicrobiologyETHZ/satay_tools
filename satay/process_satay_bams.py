@@ -62,8 +62,10 @@ def merge_bams(sample, output_dir, bam_dir, bam_suffix="Aligned.sortedByCoord.ou
         run_command(cmd)
         return output_bam
     else:
-        logging.error(f"No bam files found for sample {sample}")
-        raise
+        msg = (f"No bam files found for sample '{sample}' in {bam_dir} "
+               f"matching '*{sample}*/*{bam_suffix}'")
+        logging.error(msg)
+        raise FileNotFoundError(msg)
 
 
 def filter_bam(output_bam):
@@ -73,7 +75,7 @@ def filter_bam(output_bam):
     output_bam = output_bam
     bed_file = output_bam.with_suffix(".bed")
     cmd = ["samtools", "view", "-h", "-F",
-           "256,272", "-q", "10", str(output_bam)]
+           "2304", "-q", "10", str(output_bam)]
     try:
         with subprocess.Popen(cmd, stdout=subprocess.PIPE) as proc:
             with open(bed_file, "w") as bed_out:
@@ -159,7 +161,7 @@ def filter_insertions(merged_file):
     filtered_file = merged_file.with_suffix(".merged.filtered")
     try:
         df = pd.read_table(merged_file, header=None)
-        df[df[3] > 1].to_csv(filtered_file, index=False, sep='\t')
+        df[df[3] > 1].to_csv(filtered_file, index=False, header=False, sep='\t')
         logging.info(
             f"Filtered insertions: {merged_file} -> {filtered_file}")
         return filtered_file
@@ -387,12 +389,12 @@ def merge_cnts_files(
             )
 
         except Exception as e:
-            logger.error(f"Error processing file {file}: {str(e)}")
+            logging.error(f"Error processing file {file}: {str(e)}")
             raise
 
     # Merge and convert data
-    tn_df = pd.concat(tn_dfs).astype(int).sort_index()
-    read_df = pd.concat(read_dfs).astype(int).sort_index()
+    tn_df = pd.concat(tn_dfs).fillna(0).astype(int).sort_index()
+    read_df = pd.concat(read_dfs).fillna(0).astype(int).sort_index()
 
     # Save output files
     today_str = datetime.today().strftime("%Y-%m-%d")

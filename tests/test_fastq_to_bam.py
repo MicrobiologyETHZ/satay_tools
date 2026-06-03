@@ -66,8 +66,9 @@ def test_find_fastq_files_tiny_dataset(data_paths):
         assert os.path.exists(file_path), f"File doesn't exist: {file_path}"
 
         # Check that the file has a valid FASTQ extension
+        # find_fastq_files returns Path objects, so coerce to str for endswith
         extensions = ['.fastq', '.fq', '.fastq.gz', '.fq.gz']
-        has_valid_ext = any(file_path.endswith(ext) for ext in extensions)
+        has_valid_ext = any(str(file_path).endswith(ext) for ext in extensions)
         assert has_valid_ext, f"File does not have a valid FASTQ extension: {file_path}"
 
     # Print found files for debugging
@@ -169,6 +170,35 @@ class TestRunStarAlignment:
             logger=logger
         )
         assert bam_file is not None, f"run_star_alignment returned None for {sample_name}"
+        assert os.path.exists(
+            bam_file), f"Output BAM file should exist at {bam_file}"
+
+    def test_run_star_single_end_uncompressed(self, data_paths, tmp_path, star_installed):
+        """Alignment works on plain (uncompressed) FASTQ - exercises run_star_alignment
+        on all platforms (the gzipped path fails on macOS; see installation docs)."""
+        import gzip
+        import shutil
+
+        gz_files = find_fastq_files(data_paths['tiny_dataset'])
+        assert len(
+            gz_files) >= 1, "At least one FASTQ file should exist in tiny dataset"
+
+        # Decompress one tiny fixture into tmp_path (drops the .gz suffix)
+        plain = tmp_path / Path(gz_files[0]).stem
+        with gzip.open(gz_files[0], 'rb') as fin, open(plain, 'wb') as fout:
+            shutil.copyfileobj(fin, fout)
+
+        logger = get_logger()
+        bam_file = run_star_alignment(
+            fastq_file1=str(plain),
+            fastq_file2=None,
+            output_dir=str(tmp_path),
+            genome_dir=REF,
+            sample_name="tiny_plain",
+            threads=1,
+            logger=logger,
+        )
+        assert bam_file is not None, "run_star_alignment returned None for uncompressed input"
         assert os.path.exists(
             bam_file), f"Output BAM file should exist at {bam_file}"
 

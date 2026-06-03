@@ -6,7 +6,7 @@ data using the test dataset included with satay-tools.
 
 
 Setting Up Your Workspace
-------------
+-------------------------
 
 For detailed installation instructions, see :doc:`../installation`.
 
@@ -42,16 +42,32 @@ Align SATAY sequencing reads to the reference genome:
      -o $output_dir \
      -g ref/GCF_000146045.2_R64_genomic.fna.gz
 
+.. note::
+
+   On **macOS**, aligning gzipped FASTQ files fails because of a STAR
+   limitation (see :doc:`../installation`). Decompress the test FASTQ files
+   first (``gunzip tests/test_data/medium_dataset/*.fastq.gz``) and point
+   ``-f`` at the uncompressed files, or run this step on Linux.
+
 Parameters
 ^^^^^^^^^^
 
-* ``-f, --fastq-dir``: Directory containing FASTQ files (can be gzipped)
+* ``-f, --fastq-dir``: Directory containing FASTQ files (can be gzipped). Reads are processed as single-end.
 * ``-o, --output-dir``: Output directory for BAM files
-* ``-g, --genome``: Reference genome in FASTA format (GCF_000146045.2 is included with satay-tools)
+* ``-g, --genome-fasta``: Reference genome in FASTA format (GCF_000146045.2 is included with satay-tools)
 
 Optional parameters:
 
-* ``--threads``: Number of threads for alignment (default: 4)
+* ``-t, --threads``: Number of threads for alignment (default: 4)
+* ``-r, --limit-bam-sort-ram``: Max RAM in bytes for STAR BAM sorting (default: 2000000000). Increase if STAR reports a BAM-sorting RAM error.
+
+.. note::
+
+   Only single-end reads are supported. On the first run, if a STAR genome
+   index is not already present next to the FASTA, satay-tools builds one
+   automatically (tuned for the small yeast genome, with a 16 GB index-build
+   RAM cap). The index is written alongside the reference and reused on
+   subsequent runs.
 
 Outputs
 ^^^^^^^
@@ -71,7 +87,7 @@ Identify transposon insertion sites from aligned BAM files:
    satay map \
      -b $output_dir \
      -o $output_dir \
-     -s 20190221.A-2_noaF \ 
+     -s 20190221.A-2_noaF \
      -a ref/GCF_000146045.2.genes.gff.gz
 
 Parameters
@@ -79,8 +95,8 @@ Parameters
 
 * ``-b, --bam-dir``: Directory containing BAM files from align step
 * ``-o, --output-dir``: Output directory for insertion site files
-* ``-s, --sample``: Sample identifier to process. Must be a part of `bam` file name
-* ``-a, --annotation``: Gene annotation file in GFF format
+* ``-s, --sample-name``: Sample identifier to process. Must be a part of the BAM file name
+* ``-a, --gff``: Annotation file(s) in GFF or BED format. May be given multiple times to count over several interval sets.
 
 Outputs
 ^^^^^^^
@@ -101,16 +117,20 @@ Combine insertion site data from multiple samples into one count matrix:
 .. code-block:: bash
 
    satay merge \
-     -d test_out/ \
+     -d $output_dir \
      -a ref/GCF_000146045.2.genes.gff.gz \
      -n test1
 
 Parameters
 ^^^^^^^^^^
 
-* ``-d, --data-dir``: Directory containing count files from map step
-* ``-a, --annotation``: Gene annotation file that was used for counting
+* ``-d, --counts-dir``: Directory containing count files from map step
+* ``-a, --gff``: Name of the annotation file that was used for counting
 * ``-n, --name``: Name prefix for output files
+
+Optional parameters:
+
+* ``--format``: Format of the annotation file, ``gff`` or ``bed`` (default: ``gff``)
 
 Outputs
 ^^^^^^^
@@ -132,7 +152,7 @@ Perform differential abundance analysis to identify genes with altered fitness b
    satay analyze \
      -f tests/test_data/test_merged_counts.txt \
      -s tests/test_data/test-metadata.csv \
-     -o test_out \
+     -o $output_dir \
      -c conc \
      -b "0"
 
@@ -140,20 +160,38 @@ Parameters
 ^^^^^^^^^^
 
 * ``-f, --counts-file``: Merged count matrix from merge step
-* ``-s, --sample-info``: Sample metadata file (CSV format)
+* ``-s, --sample_data``: Sample metadata file (CSV format)
 * ``-o, --output-dir``: Output directory for analysis results
-* ``-c, --condition``: Column name in metadata for experimental condition
-* ``-b, --baseline``: Baseline/reference condition for comparison
+* ``-c, --comp-col``: Column name in metadata that defines the contrasts (experimental condition)
+* ``-b, --baseline``: Baseline/reference value in ``--comp-col``; all other values are compared to it
+
+Optional parameters:
+
+* ``-a, --gff``: GFF file used to annotate results with gene names (optional)
+* ``-l, --filter``: Drop genes/intervals with fewer than this many counts across samples (default: 100)
+* ``--alpha``: FDR cutoff for DESeq2 (default: 0.05)
+* ``--sample-id-col``: Column in the metadata holding sample IDs; must match the count matrix columns (default: ``sample_id``)
+* ``--ids``: GFF fields to keep when annotating (default: ``locus_tag gene``)
+* ``-t, --threads``: Number of CPUs for DESeq2 inference (default: min(8, available cores))
 
 Sample Metadata Format
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-The metadata file should be a CSV with at minimum 2 columns:
+The metadata file is a CSV with one row per sample. It must contain a sample-ID
+column (named ``sample_id`` by default, configurable with ``--sample-id-col``)
+whose values match the column names of the count matrix, plus the column passed
+to ``--comp-col`` holding the condition/grouping variable. For example:
 
-Where:
+.. code-block:: text
 
-* ``sample`` column: Sample identifiers matching column names in count matrix
-* ``treatment`` column: Experimental condition (or any grouping variable)
+   sample_id,conc
+   20190221.A-1_noaF,0
+   20190221.A-1_4nMaF,4
+   20190221.A-2_noaF,0
+   20190221.A-2_4nMaF,4
+
+Here ``--comp-col conc`` defines the contrasts and ``--baseline 0`` sets the
+reference level, so each non-zero concentration is compared against ``0``.
 
 Outputs
 ^^^^^^^

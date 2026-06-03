@@ -23,6 +23,8 @@ Features
    installation
    quickstart
    tutorials/index
+   api/index
+   changelog
 
 
 

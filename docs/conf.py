@@ -33,6 +33,10 @@ autodoc_default_options = {
     'show-inheritance': True,
 }
 
+# Mock heavy/conda-only imports so autodoc can document the modules without
+# importing the real packages (they are not installed in the docs build env).
+autodoc_mock_imports = ['pydeseq2', 'pyranges', 'pandas', 'numpy']
+
 # Napoleon settings
 napoleon_google_docstring = True
 napoleon_numpy_docstring = True

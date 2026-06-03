@@ -6,10 +6,11 @@ import pyranges as pr
 from pathlib import Path
 from datetime import datetime
 import logging
+import os
 import sys
 
 
-def run_deseq(count_df, sample_data, condition_col, baseline, a=0.01):
+def run_deseq(count_df, sample_data, condition_col, baseline, a=0.01, n_cpus=None):
     """
     Run DESeq2 analysis on count data.
 
@@ -34,7 +35,9 @@ def run_deseq(count_df, sample_data, condition_col, baseline, a=0.01):
         logging.warning(
             "Count data and sample data indices don't match exactly")
 
-    inference = DefaultInference(n_cpus=8)
+    if n_cpus is None:
+        n_cpus = min(8, os.cpu_count() or 1)
+    inference = DefaultInference(n_cpus=n_cpus)
     dds = DeseqDataSet(
         counts=count_df,
         metadata=sample_data,
@@ -67,7 +70,8 @@ def load_filter_deseq(counts_file, sample_data_file,
                       filter=100,
                       comp_col='conc', baseline="0nMaF",
                       a=0.01,
-                      sample_id_col='sample_id'
+                      sample_id_col='sample_id',
+                      n_cpus=None
                       ):
     """Load count data and sample metadata, filter low-count genes, run DESeq2."""
     try:
@@ -125,7 +129,7 @@ def load_filter_deseq(counts_file, sample_data_file,
             raise ValueError("No genes remain after filtering")
 
         vst_counts, res_df = run_deseq(
-            df, sample_data, comp_col, baseline, a=a)
+            df, sample_data, comp_col, baseline, a=a, n_cpus=n_cpus)
         return vst_counts, res_df
 
     except FileNotFoundError as e:
@@ -142,15 +146,21 @@ def merge_annotations(res_df, gff_file, ids_to_keep=["locus_tag", "gene", "produ
         logging.info(f"Loading annotations from {gff_file}")
         gff = pr.read_gff3(gff_file).as_df()
 
-        # Check if required columns exist
+        # Drop requested columns that aren't actually present in the GFF
         missing_cols = set(ids_to_keep) - set(gff.columns)
         if missing_cols:
             logging.warning(f"Missing annotation columns: {missing_cols}")
             ids_to_keep = [col for col in ids_to_keep if col in gff.columns]
 
-        if not ids_to_keep:
-            logging.warning("No valid annotation columns found")
+        # 'locus_tag' is the key used to join annotations to results, so it must
+        # be present in the GFF and always selected, regardless of --ids
+        if 'locus_tag' not in gff.columns:
+            logging.warning(
+                "GFF has no 'locus_tag' field to merge on; "
+                "returning results without annotations")
             return res_df
+        if 'locus_tag' not in ids_to_keep:
+            ids_to_keep = ['locus_tag'] + ids_to_keep
 
         gff = gff[ids_to_keep].drop_duplicates()
         merged = res_df.merge(
@@ -166,7 +176,8 @@ def merge_annotations(res_df, gff_file, ids_to_keep=["locus_tag", "gene", "produ
 
 def gene_da(counts_file, sample_data_file, output_dir,
             filter, comp_col, baseline, a,
-            gff_file='', ids_to_keep=["locus_tag", "gene", "product"]):
+            gff_file='', ids_to_keep=["locus_tag", "gene", "product"],
+            sample_id_col='sample_id', n_cpus=None):
     """Run complete differential analysis pipeline."""
     # Set up logging
     logging.basicConfig(level=logging.INFO,
@@ -185,7 +196,9 @@ def gene_da(counts_file, sample_data_file, output_dir,
         today_str = datetime.today().strftime("%y-%m-%d")
 
         vst_counts, res_df = load_filter_deseq(counts_file, sample_data_file,
-                                               filter, comp_col, baseline, a)
+                                               filter, comp_col, baseline, a,
+                                               sample_id_col=sample_id_col,
+                                               n_cpus=n_cpus)
         logging.info(f"DESeq2 results shape: {res_df.shape}")
 
         if gff_file:

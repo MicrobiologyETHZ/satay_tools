@@ -420,3 +420,8 @@ buildNumber.properties
 
 # added by Anna for general purposes :)
 /test_data/
+
+# STAR genome index (regenerated from ref/*.fna.gz on first run); keep only source refs
+ref/*
+!ref/*.fna.gz
+!ref/*.gff.gz

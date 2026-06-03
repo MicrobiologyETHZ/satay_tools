@@ -13,6 +13,7 @@ import sys
 import re
 import gzip
 import sys
+import tempfile
 from pathlib import Path
 import shutil
 
@@ -98,8 +99,14 @@ def find_paired_files(fastq_files):
     return paired_files
 
 
-def run_star_alignment(fastq_file1, fastq_file2, output_dir, genome_dir, sample_name, threads, logger):
+def run_star_alignment(fastq_file1, fastq_file2, output_dir, genome_dir, sample_name, threads, logger,
+                       limit_bam_sort_ram=2_000_000_000):
     """Run STAR alignment for single or paired-end reads"""
+
+    # Coerce path-like args to str so they can be passed to STAR and joined for logging
+    fastq_file1 = str(fastq_file1)
+    if fastq_file2 is not None:
+        fastq_file2 = str(fastq_file2)
 
     # Create sample output directory
     sample_output_dir = os.path.join(output_dir, sample_name)
@@ -114,7 +121,7 @@ def run_star_alignment(fastq_file1, fastq_file2, output_dir, genome_dir, sample_
         "--outSAMtype", "BAM", "SortedByCoordinate",
         "--outFileNamePrefix", os.path.join(sample_output_dir,
                                             f"{sample_name}_"),
-        "--limitBAMsortRAM 1203904172 ",  # this is weird
+        "--limitBAMsortRAM", str(limit_bam_sort_ram),
         "--readFilesIn", fastq_file1
     ]
 
@@ -135,10 +142,13 @@ def run_star_alignment(fastq_file1, fastq_file2, output_dir, genome_dir, sample_
         subprocess.run(star_cmd, check=True)
         logger.info(f"STAR alignment completed successfully for {sample_name}")
 
-        # Rename the final output BAM file for convenience
+        # Create a convenience symlink to the final BAM (overwrite if re-running)
         final_bam = os.path.join(
             sample_output_dir, f"{sample_name}_Aligned.sortedByCoord.out.bam")
         renamed_bam = os.path.join(output_dir, f"{sample_name}.bam")
+        if os.path.lexists(renamed_bam):
+            logger.info(f"Replacing existing symlink/file: {renamed_bam}")
+            os.remove(renamed_bam)
         os.symlink(final_bam, renamed_bam)
         logger.info(f"Created symlink: {renamed_bam}")
 
@@ -158,7 +168,7 @@ def check_star_installed():
         return False
 
 
-def create_genome_index(genome_fasta, genome_dir, threads, logger, recompress=True):
+def create_genome_index(genome_fasta, genome_dir, threads, logger):
     logger.info(f"Creating STAR genome index in {genome_dir}")
 
     # Create genome directory if it doesn't exist
@@ -166,33 +176,18 @@ def create_genome_index(genome_fasta, genome_dir, threads, logger, recompress=Tr
         logger.error("Genome directory does not exist")
         sys.exit(1)
 
-    # Check if the input file is gzipped
     is_gzipped = genome_fasta.endswith('.gz')
-    decompressed_fasta = None
-    star_success = False  # Track success of STAR command
+    tmp_fasta = None
+    star_success = False
 
     try:
-        # Handle gzipped FASTA files
         if is_gzipped:
-            logger.info(f"Decompressing {genome_fasta}")
-            # Remove .gz extension
-            decompressed_fasta = str(Path(genome_fasta).with_suffix(""))
-
-            # Check if decompressed file already exists
-            if os.path.exists(decompressed_fasta):
-                logger.warning(
-                    f"Decompressed file {decompressed_fasta} already exists. Using it.")
-            else:
-                # Decompress the file
-                with gzip.open(genome_fasta, 'rb') as f_in:
-                    with open(decompressed_fasta, 'wb') as f_out:
-                        shutil.copyfileobj(f_in, f_out)
-                logger.info(f"Decompressed to {decompressed_fasta}")
-
-            # Use the decompressed file for STAR
-            fasta_for_star = decompressed_fasta
+            logger.info(f"Decompressing {genome_fasta} to a temporary file")
+            fd, tmp_fasta = tempfile.mkstemp(suffix=".fa")
+            with gzip.open(genome_fasta, 'rb') as f_in, os.fdopen(fd, 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+            fasta_for_star = tmp_fasta
         else:
-            # Use the original file if not gzipped
             fasta_for_star = genome_fasta
 
         # For yeast genome, these parameters work well
@@ -248,33 +243,13 @@ def create_genome_index(genome_fasta, genome_dir, threads, logger, recompress=Tr
         star_success = False
 
     finally:
-        # Clean up decompressed file if needed (in a finally block to ensure this runs)
-        if is_gzipped and decompressed_fasta and os.path.exists(decompressed_fasta):
-            if star_success and recompress:
-                try:
-                    logger.info(f"Recompressing {decompressed_fasta}")
-
-                    # Compress the file
-                    with open(decompressed_fasta, 'rb') as f_in:
-                        with gzip.open(genome_fasta, 'wb') as f_out:
-                            shutil.copyfileobj(f_in, f_out)
-
-                    # Remove the decompressed file
-                    os.remove(decompressed_fasta)
-                    logger.info(
-                        f"Removed decompressed file {decompressed_fasta}")
-                except Exception as compress_error:
-                    logger.error(
-                        f"Failed to recompress file: {compress_error}")
-            elif not star_success:
-                try:
-                    # Clean up decompressed file if there was an error
-                    os.remove(decompressed_fasta)
-                    logger.info(
-                        f"Cleaned up decompressed file {decompressed_fasta} after error")
-                except Exception as cleanup_error:
-                    logger.error(
-                        f"Failed to clean up decompressed file: {cleanup_error}")
+        if tmp_fasta and os.path.exists(tmp_fasta):
+            try:
+                os.remove(tmp_fasta)
+                logger.info(f"Removed temporary file {tmp_fasta}")
+            except Exception as cleanup_error:
+                logger.error(
+                    f"Failed to remove temporary file: {cleanup_error}")
 
         return star_success
 
@@ -319,7 +294,8 @@ def verify_star_index(genome_dir, logger):
 
 
 def map_fastq_to_bam(fastq_dir, output_dir, genome_fasta, threads,
-                     suffix=[], single_end=True):
+                     suffix=[], single_end=True,
+                     limit_bam_sort_ram=2_000_000_000):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -367,7 +343,8 @@ def map_fastq_to_bam(fastq_dir, output_dir, genome_fasta, threads,
         for fastq_file in fastq_files:
             sample_name = get_sample_name(fastq_file)
             run_star_alignment(str(fastq_file), None, str(output_dir),
-                               str(genome_dir), sample_name, threads, logger)
+                               str(genome_dir), sample_name, threads, logger,
+                               limit_bam_sort_ram=limit_bam_sort_ram)
     else:
         logger.error('Paired end not implemented')
         # Auto-detect or use paired mode

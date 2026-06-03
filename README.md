@@ -12,11 +12,11 @@ A Python package for analyzing SATAY (Saturation Transposon Analysis in Yeast) t
 ## Installation
 
 ```bash
-   git clone https://github.com/yourusername/satay_tools.git
+   git clone https://github.com/MicrobiologyETHZ/satay_tools.git
    cd satay_tools
    conda env create -f satay_environment.yaml
    conda activate satay-tools
-   pip install .
+   pip install --no-deps .
 
 ```
 
