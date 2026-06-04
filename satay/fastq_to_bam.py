@@ -171,6 +171,10 @@ def check_star_installed():
 def create_genome_index(genome_fasta, genome_dir, threads, logger):
     logger.info(f"Creating STAR genome index in {genome_dir}")
 
+    # Coerce path-like args to str for string ops and subprocess/logging
+    genome_fasta = str(genome_fasta)
+    genome_dir = str(genome_dir)
+
     # Create genome directory if it doesn't exist
     if not os.path.exists(genome_dir):
         logger.error("Genome directory does not exist")
@@ -285,7 +289,7 @@ def verify_star_index(genome_dir, logger):
             missing_files.append(file)
 
     if missing_files:
-        logger.error(
+        logger.info(
             f"Missing required index files: {', '.join(missing_files)}")
         return False
 

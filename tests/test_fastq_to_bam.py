@@ -139,9 +139,8 @@ class TestRunStarAlignment:
     def test_create_genome_index(self, tmp_path):
         # Create logger
         logger = get_logger()
-        genome_fasta = os.path.join(REF, "GCF_000146045.2_R64_genomic.fna.gz")
-        index_done = create_genome_index(
-            str(genome_fasta), str(tmp_path), 1, logger)
+        genome_fasta = Path(REF) / "GCF_000146045.2_R64_genomic.fna.gz"
+        index_done = create_genome_index(genome_fasta, tmp_path, 1, logger)
         assert index_done is True
 
     def test_run_star_single_end(self, data_paths, tmp_path, star_installed):
