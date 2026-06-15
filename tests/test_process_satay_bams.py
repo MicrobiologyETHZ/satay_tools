@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from satay.process_satay_bams import merge_bams, filter_bam
+from satay.process_satay_bams import merge_bams, filter_bam, map_sample
 import os
 import sys
 import pytest
@@ -116,3 +116,36 @@ def test_filter_bam_integration(data_paths, tmp_path):
     # Compare with control BED file
     assert compare_bed_files(result_bed, control_bed_file), \
         f"Output BED file {result_bed} does not match control {control_bed_file}"
+
+
+def test_map_sample_integration(data_paths, tmp_path):
+    """Run the full map pipeline (map_sample) end-to-end and assert non-empty counts.
+
+    Covers the path the 'satay map' CLI uses: merge_bams -> filter_bam ->
+    process_orientation -> sort -> merge -> filter_insertions -> count_insertions.
+    """
+    try:
+        subprocess.run(["samtools", "--version"], capture_output=True, check=True)
+        subprocess.run(["bedtools", "--version"], capture_output=True, check=True)
+    except (subprocess.SubprocessError, FileNotFoundError):
+        pytest.skip("samtools or bedtools not available")
+
+    gff = Path(__file__).parent.parent / "ref" / "GCF_000146045.2.genes.gff.gz"
+    if not gff.exists():
+        pytest.skip(f"Annotation file not found: {gff}")
+
+    sample = "20190221.A-1_noaF"
+    map_sample(
+        sample=sample,
+        bam_dir=str(data_paths['small_dataset']),
+        output_dir=str(tmp_path),
+        interval_files=[str(gff)],
+    )
+
+    cnts = list(tmp_path.glob(f"*{sample}*.cnts"))
+    assert cnts, "map_sample produced no .cnts file"
+    assert cnts[0].stat().st_size > 0, f"count file {cnts[0]} is empty"
+
+    filtered = list(tmp_path.glob("*.merged.filtered"))
+    assert filtered and filtered[0].stat().st_size > 0, \
+        "filtered insertions file is missing or empty"

@@ -44,17 +44,15 @@ Align SATAY sequencing reads to the reference genome:
 
 .. note::
 
-   On **macOS**, aligning gzipped FASTQ files fails because of a STAR
-   limitation (see :doc:`../installation`). Decompress the test FASTQ files
-   first (``gunzip tests/test_data/medium_dataset/*.fastq.gz``) and point
-   ``-f`` at the uncompressed files, or run this step on Linux.
+   This step requires **Linux** — the STAR aligner does not work on macOS
+   (see :doc:`../installation`). The remaining steps work on either platform.
 
 Parameters
 ^^^^^^^^^^
 
 * ``-f, --fastq-dir``: Directory containing FASTQ files (can be gzipped). Reads are processed as single-end.
 * ``-o, --output-dir``: Output directory for BAM files
-* ``-g, --genome-fasta``: Reference genome in FASTA format (GCF_000146045.2 is included with satay-tools)
+* ``-g, --genome-fasta``: Reference genome in FASTA format. The *S. cerevisiae* R64 genome (NCBI assembly ``GCF_000146045.2``) is bundled under ``ref/``; supply your own FASTA here to use a different genome.
 
 Optional parameters:
 
@@ -135,12 +133,15 @@ Optional parameters:
 Outputs
 ^^^^^^^
 
-The merge step produces two count matrices:
+The merge step produces two count matrices, where ``{name}`` is the value passed
+to ``-n`` (``test1`` in this example) and ``{date}`` is the current date:
 
-* ``{date}_test1_transposon_counts.csv``: Number of unique transposon insertions per gene per sample
-* ``{date}_test1_read_counts.csv``: Total read depth per gene per sample
+* ``{date}_{name}_transposon_counts.csv``: Number of unique transposon insertions per gene per sample
+* ``{date}_{name}_read_counts.csv``: Total read depth per gene per sample
 
-These matrices have genes as rows and samples as columns, suitable for downstream statistical analysis.
+These matrices have genes as rows and samples as columns, suitable for downstream
+statistical analysis. Pass one of them (typically the transposon counts) as the
+``--counts-file`` for the ``analyze`` step.
 
 Step 4: Statistical Analysis
 -----------------------------
@@ -155,6 +156,15 @@ Perform differential abundance analysis to identify genes with altered fitness b
      -o $output_dir \
      -c conc \
      -b "0"
+
+.. note::
+
+   This step normally takes a count matrix produced by ``merge`` (one of the
+   ``*_transposon_counts.csv`` / ``*_read_counts.csv`` files). The tutorial
+   instead uses the bundled ``tests/test_data/test_merged_counts.txt`` and
+   ``test-metadata.csv`` because the tutorial's own samples are all the same
+   baseline condition, which cannot support a differential comparison. The
+   bundled files provide multiple conditions so the analysis runs end to end.
 
 Parameters
 ^^^^^^^^^^

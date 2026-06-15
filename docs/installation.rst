@@ -1,6 +1,11 @@
 Installation
 ============
 
+Prerequisites
+-------------
+
+`git <https://git-scm.com/>`_ and a `conda <https://docs.conda.io/>`_
+distribution (e.g. Miniconda or Miniforge) must be installed first.
 
 .. code-block:: bash
 
@@ -15,15 +20,7 @@ Installation
 
 .. note::
 
-   **macOS users:** the ``satay align`` step runs the STAR aligner with
-   ``--readFilesCommand`` to read **gzipped** FASTQ files on the fly. STAR's
-   macOS (conda) builds cannot spawn this decompression subprocess, so aligning
-   gzipped FASTQ files fails on macOS with
-   ``EXITING: ... Failed spawning readFilesCommand``. Work around this by either:
-
-   * decompressing the FASTQ files first (e.g. ``gunzip *.fastq.gz``) and
-     passing the uncompressed files to ``satay align``, or
-   * running the ``align`` step on Linux.
-
-   Uncompressed input works on macOS, and the other pipeline steps
-   (``map``, ``merge``, ``analyze``) are unaffected.
+   **The** ``align`` **step requires Linux.** It runs the STAR aligner, which
+   does not work on macOS (STAR fails to read the input reads). Run ``align`` on
+   a Linux machine. The other steps (``map``, ``merge`` and ``analyze``) work on
+   both macOS and Linux.

@@ -7,6 +7,7 @@ Version 0.1.0 (2024-09-09)
 ---------------------------
 
 **Added**
+
 - Initial release of SATAY Tools
 - Command-line interface for transposon analysis
 - FASTQ to BAM conversion functionality

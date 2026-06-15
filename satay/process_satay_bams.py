@@ -82,6 +82,13 @@ def filter_bam(output_bam):
                 subprocess.run(["bedtools", "bamtobed"],
                                stdin=proc.stdout, stdout=bed_out, check=True)
         logging.info(f"Filtered BAM to BED: {output_bam} -> {bed_file}")
+        if bed_file.stat().st_size == 0:
+            raise ValueError(
+                f"No reads passed filtering (primary alignments, MAPQ >= 10) for "
+                f"{output_bam}; the resulting BED is empty. Verify the BAM contains "
+                f"mapped reads, e.g. 'samtools view -c {output_bam}'. A failed or empty "
+                f"alignment step is the usual cause."
+            )
         return bed_file
     except Exception as e:
         logging.error(f"Error filtering BAM {output_bam}: {e}")
